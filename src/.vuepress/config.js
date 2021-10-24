@@ -12,9 +12,18 @@ module.exports = {
     },
     themeConfig: {
         nav: [
+            { text: '基础知识', link: '/pages/basic/' },
             { text: '服务', link: '/pages/server/tomcat' },
         ],
         sidebar: {
+            '/pages/basic/': [{
+                title: '基础知识',
+                path: '/pages/basic/',
+                collapsable: false,
+                children: [
+                    ''
+                ]
+            }],
             '/pages/server/': [{
                 title: '服务',
                 path: '/pages/server/tomcat',
@@ -23,14 +32,6 @@ module.exports = {
                     'tomcat',
                 ]
             }],
-            '/pages/es6/': [{
-                title: 'ES6',
-                path: '/pages/es6/',
-                collapsable: false,
-                children: [
-                    ''
-                ]
-            }]
         },
         sidebarDepth: 2,
         lastUpdated: '更新时间',

@@ -33,7 +33,7 @@ sh shutdown.sh
 ### windows
 - 执行 shutdown.bat
 
-## 部署项目
+## 部署前端项目
 ```
 到 tomcat/webapps/ 创建一个目录：比如 hello
 将前端项目文件放入到该文件夹下

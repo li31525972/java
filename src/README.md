@@ -4,7 +4,7 @@ heroImage: /images/logo.jpeg
 heroText: Yahui的博客
 tagline: java的学习之路
 actionText: Get Started →
-actionLink: /pages/server/tomcat
+actionLink: /pages/basic/
 features:
 - title: 关于博客
   details: java基础知识整理、记录、以及实战当中的应用场景和注意事项， 注意：此文档仅限交流学习使用
