@@ -66,6 +66,16 @@ byte b = (byte)a;
 
 
 ## 面向对象
+### 类
+```java
+// 创建
+public class Person {
+    
+}
+
+// 使用
+Person student = new Person();
+```
 
 
 ## 常用类
