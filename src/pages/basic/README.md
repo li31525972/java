@@ -58,6 +58,9 @@ byte b = (byte)a;
 ```
 ### 引用类型
 #### 类
+```java
+public class 类名 {}
+```
 #### 接口
 #### 数组
 
@@ -76,7 +79,9 @@ public class Person {
 // 使用
 Person student = new Person();
 ```
-
+### 修饰符
+#### private
+- `private`修饰的成员只能在本类中使用，不能被别的类使用
 
 ## 常用类
 
