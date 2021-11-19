@@ -12,6 +12,9 @@
 
 ## 启动
 - cd 到tomcat/bin目录下
+```
+cd /usr/local/tomcat/bin/
+```
 ### Mac/Linux
 - 执行 ./startup.sh
 ```
@@ -25,6 +28,9 @@ chmod u+x *.sh 放开所有.sh文件权限
 
 ## 停止
 - cd 到tomcat/bin目录下
+```
+cd /usr/local/tomcat/bin/
+```
 ### Mac/Linux
 - 执行 sh shutdown.sh
 ```
@@ -35,7 +41,27 @@ sh shutdown.sh
 
 ## 部署前端项目
 ```
-到 tomcat/webapps/ 创建一个目录：比如 hello
+到 tomcat/webapps/ROOT 创建一个目录：比如 hello
 将前端项目文件放入到该文件夹下
 访问：localhost:8080/hello
+
+如果要部署到跟路径就将项目的index.html直接放在ROOT文件夹下就行
 ```
+
+## IDEA集成tomcat
+- 点击运行 - 编辑配置
+
+<img src="/tomcat/tomcat1.png"/>
+
+<img src="/tomcat/tomcat2.png"/>
+
+- 选择`Tomcat Server` - 本地
+
+<img src="/tomcat/tomcat3.png"/>
+
+- 点击配置 - 选择`tomcat`安装地址或者手动输入安装地址
+
+<img src="/tomcat/tomcat4.png"/>
+<img src="/tomcat/tomcat5.png"/>
+
+- 最后点击确定
