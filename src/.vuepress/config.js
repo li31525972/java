@@ -14,6 +14,7 @@ module.exports = {
         nav: [
             { text: '基础知识', link: '/pages/basic/' },
             { text: '服务', link: '/pages/server/tomcat' },
+            { text: 'Servlet', link: '/pages/servlet/' },
         ],
         sidebar: {
             '/pages/basic/': [{
@@ -30,6 +31,14 @@ module.exports = {
                 collapsable: false,
                 children: [
                     'tomcat',
+                ]
+            }],
+            '/pages/servlet/': [{
+                title: 'Servlet',
+                path: '/pages/servlet/',
+                collapsable: false,
+                children: [
+                    '',
                 ]
             }],
         },
