@@ -56,14 +56,17 @@ System.out.println(b); // 会报错，从int转换为byte可能会损失精度
 // 强制转换
 byte b = (byte)a; 
 ```
-### 引用类型
-#### 类
+### 类
 ```java
 public class 类名 {}
 ```
-#### 接口
-#### 数组
-
+### 接口
+### 数组
+- 数组的长度是固定的
+```java
+int[] arr = new int[5]; // 创建一个数组，数组的长度是5
+int[] arr = {1,2,3,4,5}; // 创建一个数组同时赋值
+```
 
 ## 基本语法
 
@@ -80,8 +83,17 @@ public class Person {
 Person student = new Person();
 ```
 ### 修饰符
+#### public
+- `public` 任何人都可以访问
+
+#### protect
+- `protect` 继承的类可以访问以及和`private`一样的权限
+
 #### private
-- `private`修饰的成员只能在本类中使用，不能被别的类使用
+- `private` 修饰的成员只能在本类中使用，不能被别的类使用
+
+#### default
+- `default` 在整个包内都可以访问
 
 ## 常用类
 
