@@ -60,6 +60,14 @@ byte b = (byte)a;
 ```java
 public class 类名 {}
 ```
+### 方法
+```java
+修饰符 返回值类型 方法名(参数类型 形参名) {}
+
+public int addCount(int a) {
+    return a + 10
+}
+```
 ### 接口
 ### 数组
 - 数组的长度是固定的
