@@ -167,3 +167,75 @@ public class servletDemo3 extends HttpServlet {
     </servlet-mapping>
 </web-app>
 ```
+
+## ServletConfig
+### 配置
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+    <!--配置servlet-->
+    <servlet>
+        <!--配置名称-->
+        <servlet-name>servletDemo1</servlet-name>
+        <!--真实访问路径-->
+        <servlet-class>com.gome.myServlet.ServletDemo1</servlet-class>
+        
+        <init-param>
+            <!--key-->
+            <param-name>encoding</param-name>
+            <!--value-->
+            <param-value>UTF-8</param-value>
+        </init-param>
+    
+        <init-param>
+            <param-name>lang</param-name>
+            <param-value>zh</param-value>
+        </init-param>
+    </servlet>
+</web-app>
+```
+### 示例
+```java
+public class ServletConfigDemo1 extends HttpServlet {
+    // 声明ServletConfig
+    private ServletConfig config;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        this.config = config;
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // 根据key获取value
+        String encoding = config.getInitParameter("encoding");
+        System.out.println(encoding);
+
+        // 获取所有的key
+        Enumeration<String> initParameterNames = config.getInitParameterNames();
+        while(initParameterNames.hasMoreElements()) {
+            String key = initParameterNames.nextElement();
+            String value = config.getInitParameter(key);
+            System.out.println(key + " -- " + value);
+        }
+
+        // 获取servletconfig名称
+        String servletName = config.getServletName();
+        System.out.println(servletName);
+
+        // 获取servletContext对象
+        ServletContext servletContext = config.getServletContext();
+        System.out.println(servletContext);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doGet(req, resp);
+    }
+}
+```
+
+## ServletContext
