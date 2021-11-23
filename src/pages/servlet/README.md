@@ -229,6 +229,9 @@ public class ServletConfigDemo1 extends HttpServlet {
         // 获取servletContext对象
         ServletContext servletContext = config.getServletContext();
         System.out.println(servletContext);
+        
+        // 获取共享数据
+        Object name = servletContext.getAttribute("name");
     }
 
     @Override
@@ -239,3 +242,82 @@ public class ServletConfigDemo1 extends HttpServlet {
 ```
 
 ## ServletContext
+### 配置
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+    <servlet>
+        <servlet-name>servletContext</servlet-name>
+        <servlet-class>com.gome.myServlet.ServletContextDemo</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>servletContext</servlet-name>
+        <url-pattern>/servletContext</url-pattern>
+    </servlet-mapping>
+    <!--配置servletContext-->
+    <context-param>
+        <!--key-->
+        <param-name>globalEncoding</param-name>
+        <!--value-->
+        <param-value>UTF-8</param-value>
+    </context-param>
+</web-app>
+```
+
+### 示例
+```java
+public class ServletContextDemo extends HttpServlet {
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // 获取ServletContext对象
+        ServletContext context = getServletContext();
+
+        // 根据key获取value
+        String value = context.getInitParameter("globalEncoding");
+        System.out.println(value);
+
+        // 获取应用的虚拟目录
+        String contextPath = context.getContextPath();
+        System.out.println(contextPath);
+
+        // 获取虚拟目录的绝对路径
+        String realPath = context.getRealPath("/");
+        System.out.println(realPath);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doGet(req, resp);
+    }
+}
+```
+
+### 共享数据
+```java
+public class ServletContextDemo extends HttpServlet {
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // 获取ServletContext对象
+        ServletContext context = getServletContext();
+
+        // 设置共享数据
+        context.setAttribute("name", "xxx");
+
+        // 获取共享数据
+        Object name = context.getAttribute("name");
+
+        // 删除共享数据
+        context.removeAttribute("name");
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doGet(req, resp);
+    }
+}
+```
