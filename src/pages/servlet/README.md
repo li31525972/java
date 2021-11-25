@@ -321,3 +321,20 @@ public class ServletContextDemo extends HttpServlet {
     }
 }
 ```
+## 注解开发
+### 使用注解
+```java
+//  /servletDemo1 就是资源访问路径
+@WebServlet("/servletDemo1")
+public class ServletNoteDemo1 extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("开始执行了。。。");
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doGet(req, resp);
+    }
+}
+```
