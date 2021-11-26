@@ -338,3 +338,44 @@ public class ServletNoteDemo1 extends HttpServlet {
     }
 }
 ```
+
+## 请求
+```java
+@WebServlet("/demo1")
+public class requestDemo1 extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("测试路径。。。");
+        // 获取虚拟目录名称
+        String contextPath = req.getContextPath();
+        System.out.println(contextPath);
+
+        // 获取servlet映射路径
+        String servletPath = req.getServletPath();
+        System.out.println(servletPath);
+
+        // 获取访问者IP地址
+        String remoteAddr = req.getRemoteAddr();
+        System.out.println(remoteAddr);
+
+        // 获取请求消息的数据
+        String queryString = req.getQueryString();
+        System.out.println(queryString);
+
+        // 获取统一资源标识符
+        String requestURI = req.getRequestURI();
+        System.out.println(requestURI);
+
+        // 获取统一资源定位标识符
+        StringBuffer requestURL = req.getRequestURL();
+        System.out.println(requestURL);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doGet(req, resp);
+    }
+}
+```
+
+## 响应
