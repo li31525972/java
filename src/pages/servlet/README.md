@@ -857,3 +857,62 @@ public class ResponseDemo5 extends HttpServlet {
     }
 }
 ```
+
+### 请求重定向
+```java
+@WebServlet("/response6")
+public class ResponseDemo6 extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("开始执行");
+
+        // 本地服务地址
+        // resp.sendRedirect(req.getContextPath() + "/response5");
+
+        // 重定向到其它站点
+        resp.sendRedirect("https://www.baidu.com");
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doGet(req, resp);
+    }
+}
+```
+
+### 文件下载
+```java
+@WebServlet("/response7")
+public class ResponseDemo7 extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        // 根据相对路径获取绝对路径
+        String path = getServletContext().getRealPath("/images/logo.jpeg");
+
+        // 创建字节输入流对象，关联读取的文件
+        BufferedInputStream bis = new BufferedInputStream(new FileInputStream(path));
+
+        resp.setHeader("Content-Type", "application/octet-stream");
+        resp.setHeader("Content-Disposition", "attachment;filename=logo.jpeg");
+
+        // 获取输出流对象
+        ServletOutputStream os = resp.getOutputStream();
+
+        // 循环读写
+        byte[] arr = new byte[1024];
+        int len;
+        while ((len = bis.read(arr)) != -1) {
+            os.write(arr, 0, len);
+        }
+
+        // 释放资源
+        bis.close();
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doGet(req, resp);
+    }
+}
+```
