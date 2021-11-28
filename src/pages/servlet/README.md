@@ -782,3 +782,78 @@ public class ResponseDemo1 extends HttpServlet {
     }
 }
 ```
+
+### 响应图片
+```java
+@WebServlet("/response3")
+public class ResponseDemo3 extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // 通过图片的相对路径获取绝对路径
+        String path = getServletContext().getRealPath("/images/logo.jpeg");
+
+        // 创建字节输入流对象，关联图片路径
+        BufferedInputStream bis = new BufferedInputStream(new FileInputStream(path));
+
+        // 通过响应对象获取字节输出流对象
+        ServletOutputStream os = resp.getOutputStream();
+
+        // 循环读写
+        byte[] arr = new byte[1024];
+        int len;
+        while ((len = bis.read(arr)) != -1) {
+            os.write(arr, 0, len);
+        }
+
+        // 释放资源
+        bis.close();
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doGet(req, resp);
+    }
+}
+```
+
+### 设置缓存时间
+```java
+@WebServlet("/response4")
+public class ResponseDemo4 extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // 设置缓存 -> 1小时缓存时间
+        resp.setDateHeader("Expires", System.currentTimeMillis() + 60*60*1000);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doGet(req, resp);
+    }
+}
+```
+
+### 设置定时刷新
+```java
+@WebServlet("/response5")
+public class ResponseDemo5 extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // 设置编码格式
+        resp.setContentType("text/html;charset=UTF-8");
+
+        String str = "3秒之后自动跳转登陆页面";
+
+        // 写入数据
+        resp.getWriter().write(str);
+
+        // 定时刷新
+        resp.setHeader("Refresh", "3;URL=/response/login.html");
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doGet(req, resp);
+    }
+}
+```
