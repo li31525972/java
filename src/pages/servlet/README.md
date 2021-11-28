@@ -744,7 +744,27 @@ public class ResponseDemo1 extends HttpServlet {
 ```
 
 ### 字符流响应
+```java
+@WebServlet("/response2")
+public class ResponseDemo2 extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // 获取字符流对象
+        PrintWriter os = resp.getWriter();
 
+        // 设置响应消息
+        String str = "test";
+
+        // 响应
+        os.write(str);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doGet(req, resp);
+    }
+}
+```
 
 ### 解决乱码
 ```java
