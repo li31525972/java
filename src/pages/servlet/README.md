@@ -296,7 +296,8 @@ public class ServletContextDemo extends HttpServlet {
 }
 ```
 
-### 共享数据
+## 数据共享
+### 应用域
 ```java
 public class ServletContextDemo extends HttpServlet {
 
@@ -321,6 +322,30 @@ public class ServletContextDemo extends HttpServlet {
     }
 }
 ```
+### 请求域
+```java
+public class ServletContextDemo extends HttpServlet {
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        // 设置共享数据
+        req.setAttribute("name", "xxx");
+
+        // 获取共享数据
+        Object name = req.getAttribute("name");
+
+        // 删除共享数据
+        req.removeAttribute("name");
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doGet(req, resp);
+    }
+}
+```
+
 ## 注解开发
 ### 使用注解
 ```java
@@ -340,6 +365,7 @@ public class ServletNoteDemo1 extends HttpServlet {
 ```
 
 ## 请求
+### 获取各种路径
 ```java
 @WebServlet("/demo1")
 public class requestDemo1 extends HttpServlet {
@@ -377,5 +403,362 @@ public class requestDemo1 extends HttpServlet {
     }
 }
 ```
+### 获取请求头信息
+```java
+@WebServlet("/request1")
+public class requestDemo1 extends HttpServlet {
+    private ServletConfig config;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        this.config = config;
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("获取请求的各种信息");
+
+        // 根据请求头名称获取对应的值
+        String header = req.getHeader("connection");
+        System.out.println(header);
+
+        // 根据请求头获取多个值
+        Enumeration<String> headers = req.getHeaders("accept-encoding");
+        System.out.println(headers);
+        while (headers.hasMoreElements()) {
+            String s = headers.nextElement();
+            System.out.println(s);
+        }
+
+        // 获取所有请求头的名称
+        Enumeration<String> headerNames = req.getHeaderNames();
+        System.out.println(headerNames);
+        while (headerNames.hasMoreElements()) {
+            String s = headerNames.nextElement();
+            System.out.println(s);
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doGet(req,resp);
+    }
+}
+```
+### 获取请求参数信息
+```java
+@WebServlet("/request2")
+public class requestDemo2 extends HttpServlet {
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // 获取请求参数信息
+
+        // 根据名称获取数据
+        System.out.println("根据名称获取数据");
+        String name = req.getParameter("name");
+        System.out.println(name);
+
+        // 根据名称获取所有数据
+        System.out.println("根据名称获取所有数据");
+        String[] ages = req.getParameterValues("age");
+        System.out.println(ages);
+        for (String age : ages) {
+            System.out.println(age);
+        }
+
+        // 获取所有名称 - 得到枚举类型
+        System.out.println("获取所有名称");
+        Enumeration<String> parameterNames = req.getParameterNames();
+        System.out.println(parameterNames);
+        while (parameterNames.hasMoreElements()) {
+            String nextName = parameterNames.nextElement();
+            String value = req.getParameter(nextName);
+            System.out.println("名称：" + nextName + " 值：" + value);
+        }
+
+        // 获取所有参数的健值对
+        System.out.println("获取所有参数的健值对");
+        Map<String, String[]> parameterMap = req.getParameterMap();
+        for (String key : parameterMap.keySet()) {
+            String[] values = parameterMap.get(key);
+            for (String value: values) {
+                System.out.println("名称：" + key + " 值：" + value);
+            }
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doGet(req, resp);
+    }
+}
+```
+### 获取参数手动封装对象
+```java
+/**
+ * 获取参数手动封装对象
+ */
+@WebServlet("/request3")
+public class RequestDemo3 extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // 获取所有的数据
+        String name = req.getParameter("name");
+        String[] ages = req.getParameterValues("ages");
+
+        User user = new User(name, ages);
+        System.out.println(user);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doGet(req, resp);
+    }
+}
+```
+
+### 获取参数反射封装对象
+```java
+/**
+ * 获取参数反射封装对象
+ */
+@WebServlet("/request4")
+public class RequestDemo4 extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // 获取所有的数据
+        Map<String, String[]> map = req.getParameterMap();
+
+        User user = new User();
+
+        for(String key : map.keySet()) {
+            String[] value = map.get(key);
+
+            try {
+                PropertyDescriptor pd = new PropertyDescriptor(key, user.getClass());
+                Method writeMethod = pd.getWriteMethod();
+                if (value.length > 1) {
+                    writeMethod.invoke(user, (Object)value);
+                } else {
+                    writeMethod.invoke(user, value);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        System.out.println(user);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doGet(req, resp);
+    }
+}
+```
+### 获取参数工具封装对象
+```java
+/**
+ * 获取参数工具封装对象
+ */
+@WebServlet("/request5")
+public class RequestDemo5 extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Map<String, String[]> map = req.getParameterMap();
+
+        User user = new User();
+        
+        try {
+            // BeanUtils 包需要引入
+            BeanUtils.populate(user, map);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(user);
+
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doGet(req, resp);
+    }
+}
+```
+### 流对象获取数据
+```java
+/**
+ * 根据流对象获取数据
+ */
+@WebServlet("/request6")
+public class RequestDemo6 extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // 字符流 -> 必须是post请求方式
+        BufferedReader reader = req.getReader();
+        String line;
+
+        while ((line = reader.readLine()) != null) {
+            System.out.println(line);
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doGet(req, resp);
+    }
+}
+```
+
+### 字节流获取数据
+```java
+@WebServlet("/request7")
+public class RequestDemo7 extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        ServletInputStream stream = req.getInputStream();
+        byte[] arr = new byte[1024];
+        int len;
+        while ((len = stream.read(arr)) != -1) {
+            System.out.println(new String(arr, 0, len));
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doGet(req, resp);
+    }
+}
+```
+
+### 中文乱码
+- `get`请求没有乱码问题
+- `post`乱码主要是因为前后端编码格式没有统一
+```java
+@WebServlet("/request7")
+public class RequestDemo7 extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // 设置为前端文件编码格式
+        req.setCharacterEncoding("UTF-8");
+        String name = req.getParameter("name");
+        System.out.println(name);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doGet(req, resp);
+    }
+}
+```
+### 请求转发
+```java
+@WebServlet("/request8")
+public class RequestDemo8 extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // 设置共享数据
+        req.setAttribute("encoding", "UTF-8");
+
+        // 获取请求调度对象
+        RequestDispatcher requestDispatcher = req.getRequestDispatcher("/request7");
+        // 实现转发
+        requestDispatcher.forward(req,resp);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doGet(req, resp);
+    }
+}
+
+@WebServlet("/request7")
+public class RequestDemo7 extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Object encoding = req.getAttribute("encoding");
+        System.out.println(encoding);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doGet(req, resp);
+    }
+}
+```
+### 请求包含
+```java
+@WebServlet("/request9")
+public class RequestDemo9 extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        RequestDispatcher requestDispatcher = req.getRequestDispatcher("/request7");
+
+        requestDispatcher.include(req,resp);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doGet(req, resp);
+    }
+}
+
+@WebServlet("/request7")
+public class RequestDemo7 extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("测试执行。。。");
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doGet(req, resp);
+    }
+}
+```
 
 ## 响应
+### 字节流响应
+```java
+@WebServlet("/response1")
+public class ResponseDemo1 extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // 获取字节输出流对象
+        ServletOutputStream os = resp.getOutputStream();
+
+        // 定义响应消息
+        String str = "hello";
+
+        // 通过字节流对象输出
+        os.write(str.getBytes());
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doGet(req, resp);
+    }
+}
+```
+
+### 字符流响应
+
+
+### 解决乱码
+```java
+@WebServlet("/response1")
+public class ResponseDemo1 extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // 设置响应编码格式
+        resp.setContentType("text/html;charset=UTF-8");
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doGet(req, resp);
+    }
+}
+```
