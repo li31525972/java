@@ -1078,3 +1078,13 @@ public class SessionDemo2 extends HttpServlet {
     }
 }
 ```
+
+## Filter 过滤器
+### init(FilterConfig filterConfig)
+- 初始化
+
+### doFilter (ServletRequest, ServletResponse, FilterChain)
+- 过滤方法
+
+### destroy()
+- 销毁
