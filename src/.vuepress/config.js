@@ -15,7 +15,7 @@ module.exports = {
             { text: '基础知识', link: '/pages/basic/' },
             { text: '服务', link: '/pages/server/tomcat' },
             { text: 'Servlet', link: '/pages/servlet/' },
-            { text: '数据存储', link: '/pages/storage/' },
+            { text: '数据库', link: '/pages/dataBase/' },
         ],
         sidebar: {
             '/pages/basic/': [{
@@ -42,9 +42,9 @@ module.exports = {
                     '',
                 ]
             }],
-            '/pages/storage/': [{
-                title: '数据存储',
-                path: '/pages/storage/',
+            '/pages/dataBase/': [{
+                title: '数据库',
+                path: '/pages/dataBase/',
                 collapsable: false,
                 children: [
                     '',
