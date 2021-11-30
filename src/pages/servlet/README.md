@@ -1088,3 +1088,53 @@ public class SessionDemo2 extends HttpServlet {
 
 ### destroy()
 - 销毁
+
+### 示例
+```java
+/**
+ * @WebFilter("/*") /* 表示所有路径
+ *                  /filter 表示/filter的路径才会被过滤
+ */
+@WebFilter("/*")
+public class FilterDemo1 implements Filter {
+    // 创建
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+        // 获取参数 - 参数是在xml中进行设置
+        String name = filterConfig.getInitParameter("name")
+    }
+
+    // 服务
+    @Override
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        System.out.println("filter 执行了");
+        // 处理乱码问题
+        servletResponse.setContentType("text/html;charset=UTF-8");
+
+        // 放行
+        filterChain.doFilter(servletRequest, servletResponse);
+    }
+
+    // 销毁
+    @Override
+    public void destroy() {
+
+    }
+}
+```
+- 使用方式2：web.xml中配置,如果有多个过滤器，执行顺序从上到下执行
+```xml
+    <filter>
+        <filter-name>filterDemo01</filter-name>
+        <filter-class>com.gm.filter.FilterDemo1</filter-class>
+        <!--配置参数-->
+        <init-param>
+            <param-name>name</param-name>
+            <param-value>张三</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>filterDemo01</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+```
