@@ -281,6 +281,27 @@ SELECT * FROM USER NAME IN ('张三','李四');
 'a_'     // 两位且开头字母是a的
 ```
 
+## 排序
+### ASC 升序
+```
+SELECT * FROM 表名 ORDER BY ASC;
+```
+
+### DESC 降序
+```
+SELECT * FROM 表名 ORDER BY DESC;
+```
+
+## 分组
+```
+// 基础语法：
+SELECT 列名 FROM 表名 [WHERE 条件] GROUP BY 分组列名 [HAVING 分组后过滤条件] [ORDER BY 排序];
+```
+
+## 分页
+```
+SELECT * FROM 表名 LIMIT 当前条数,每页显示的条数;
+```
 
 ## 聚合函数
 ### COUNT 统计数量
@@ -306,6 +327,39 @@ SELECT SUM(列名) FROM 表名;
 ### AVG 求平均值
 ```
 SELECT AVG(列名) FROM 表名;
+```
+
+## 外键约束
+- 让表与表之间产生关联关系，保证数据的准确性
+
+### 建表时添加外键约束
+```
+// ⚠️：order 不可以作为表名
+// 基本语法：
+CREATE TABLE IF NOT EXISTS orderlist(
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	number VARCHAR(20) NOT NULL,
+	uid INT,
+	CONSTRAINT 外键名 FOREIGN KEY (本表外键列名) REFERENCES 主表名(主表列名)
+);
+// 示例：
+CREATE TABLE IF NOT EXISTS orderlist(
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	number VARCHAR(20) NOT NULL,
+	uid INT,
+	CONSTRAINT ou_fkl FOREIGN KEY (uid) REFERENCES user(id)
+);
+
+// 基本语法：
+ALTER TABLE 表名称 ADD FOREIGN KEY 列名称 REFERENCES 关联表名称(列名称);
+
+// 示例
+ALTER TABLE ORDER ADD FOREIGN KEY UID REFERENCES USER(ID)
+```
+
+### 删除外键约束
+```
+
 ```
 
 ## DCL
