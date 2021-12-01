@@ -74,3 +74,123 @@ All done!
 ```
 
 
+## DDL
+- 操作数据库和数据表
+
+### 查询数据库
+```
+// 查询所有的数据库
+SHOW DATABASES;
+
+// 查询当前正在使用的数据库
+SELECT DATABASE();
+
+// 查询数据库的创建语句
+SHOW CREATE DATABASE 数据库名称;
+
+// 查询数据库的字符集
+SHOW CREATE DATABASE 数据库名称;
+```
+
+### 创建数据库
+```
+// 创建数据库
+CREATE DATABASE 数据库名称;
+
+// 数据库不存在则创建
+CREATE DATABASE IF NOT EXISTS 数据库名称;
+
+// 创建数据库并指定字符集
+CREATE DATABASE 数据库名称 CHARACTER SET utf8;
+```
+
+### 修改数据库
+```
+// 修改数据库的字符集
+ALTER DATABASE 数据库名称 CHARACTER SET 字符集名称;
+```
+
+
+### 删除数据库
+```
+// 删除数据库
+DROP DATABASE 数据库名称;
+
+// 如果数据库存在则删除
+DROP DATABASE IF EXISTS 数据库名称;
+```
+
+### 使用数据库
+```
+USE 数据库名称;
+```
+
+### 创建数据表
+```
+// 基本语法
+CREATE TABLE 表名(
+    字段名 数据类型    约束,
+    ...
+    字段名 数据类型    约束
+)
+
+// 示例：
+CREATE TABLE user(
+    id  INT NOT NULL,
+    name VARCHAR(20),
+    age INT
+)
+```
+
+### 查询数据表
+```
+// 查询所有的数据表
+SHOW TABLES;
+
+// 查询表结构
+DESC 表名;
+// 示例：查询 USER 表的表结构
+DESC USER;
+
+// 查询数据库中某个表的字符集
+SHOW TABLE STATUS FROM 数据库名称 LINK '表名';
+```
+
+### 修改数据表
+```
+// 修改表名
+ALTER TABLE 表名 RENAME TO 新表名;
+
+// 修改表的字符集
+ALTER TABLE 表名 CHARACTER SET 字符集名称;
+
+// 单独添加一列
+ALTER TABLE 表名 ADD 字段名 数据类型;
+
+// 修改某列的数据类型
+ALTER TABLE 表名 MODIFY 字段名 新数据类型;
+
+// 修改列名和数据类型
+ALTER TABLE 表名 CHANGE 列名 新列名 新数据类型;
+```
+
+### 删除数据表
+```
+// 删除数据表
+DROP TABLE 表名;
+
+// 数据表存在则删除
+DROP TABLE IS EXISTS 表名;
+
+// 删除数据表的某一列
+ALTER TABLE 表名 DROP 字段名; 
+```
+
+## DML
+- 表数据的增删改
+
+## DQL
+- 表数据的查询
+
+## DCL
+- 定义数据库的访问权限和安全级别、及创建用户
