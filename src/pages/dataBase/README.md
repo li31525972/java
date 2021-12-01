@@ -188,9 +188,125 @@ ALTER TABLE 表名 DROP 字段名;
 
 ## DML
 - 表数据的增删改
+### 新增表数据
+```
+// 给指定列添加数据
+INSERT INTO 表民(字段1,字段2)VALUES(值1,值2);
+
+// 给全部列添加数据
+INSERT INTO 表名 VALUES(值1,值2,...);
+```
+### 修改表数据
+```
+// 语法：
+UPDATE 表名 SET 字段名=值,字段名=值 WHERE (条件);
+
+// 示例：
+UPDATE USER SET NAME='张三' WHERE ID=1;
+```
+
+### 删除表数据
+```
+DELETE FROM 表名 WHERE 条件;
+```
 
 ## DQL
 - 表数据的查询
+### 查询语法
+```
+SELECT 字段列表 FROM 表名列表 WHERE 条件列表 GROUP BY 分组字段 HAVING 分组后的过滤条件 ORDER BY 排序 LIMIT 分页;
+```
+### 查询全部数据
+```
+SELECT * FROM 表名;
+```
+
+### 查询指定字段的表数据
+```
+SELECT 列名1,列名2 FROM 表名;
+```
+
+### 去重查询
+```
+SELECT DISINCT 列名1,列名2.. FROM 表名;
+```
+
+### 计算列的值
+```
+SELECT 列名1 运算符 列名2 FROM 表名;
+```
+
+### 别名查询
+```
+SELECT 列名 AS 别名 FROM 表名;
+```
+
+## WHERE
+
+<img src="/images/where.png" />
+
+### 且
+```
+// 语法1
+SELECT * FROM 表名 WHERE 条件1 AND 条件2;
+// 示例：查询18以上50以下所有用户
+SELECT * FROM USER WHERE AGE > 18 AND AGE < 50;
+
+// 语法2
+SELECT * FROM XX WHERE 字段名 BETWEEN 值1 AND 值2;
+// 示例：查询18以上50以下所有用户
+SELECT * FROM USER WHERE AGE BETWEEN 18 AND 20;
+```
+
+### 或
+```
+// 语法1
+SELECT * FROM 表名 WHERE 条件1 OR 条件2;
+// 示例：
+SELECT * FROM USER WHERE NAME = '张三' OR NAME = '李四';
+
+// 语法2
+SELECT * FROM 表名 WHERE 列名 IN (值1,值2);
+// 示例：
+SELECT * FROM USER NAME IN ('张三','李四');
+```
+
+## LINK
+```
+'%a'     // 以a结尾的数据
+'a%'     // 以a开头的数据
+'%a%'    // 含有a的数据
+'_a_'    // 三位且中间字母是a的
+'_a'     // 两位且结尾字母是a的
+'a_'     // 两位且开头字母是a的
+```
+
+
+## 聚合函数
+### COUNT 统计数量
+```
+SELECT COUNT(列名) FROM 表名;
+```
+
+### MAX 求最大值
+```
+SELECT MAX(列名) FROM 表名;
+```
+
+### MIN 求最小值
+```
+SELECT MIN(列名) FROM 表名;
+```
+
+### SUM 求和
+```
+SELECT SUM(列名) FROM 表名;
+```
+
+### AVG 求平均值
+```
+SELECT AVG(列名) FROM 表名;
+```
 
 ## DCL
 - 定义数据库的访问权限和安全级别、及创建用户
