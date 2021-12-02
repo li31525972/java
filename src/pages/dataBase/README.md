@@ -776,6 +776,31 @@ SELECT 函数名称(实际参数);
 DROP FUNCTION 函数名称;
 ```
 
+## 触发器
+### 创建
+```
+DELIMITER $
+
+CREATE TRIGGER 触发器名称
+BEFORE|AFTERINSERT|UPDATE|DELETE
+ON 表名
+FOR EACH ROW
+BEGIN
+        触发器要执行的功能;
+END$
+
+DELIMITER ;
+```
+
+### 查看
+```
+SHOW TRIGGERS;
+```
+
+### 删除
+```
+DROP TRIGGER 触发器名称;
+```
 
 ## DCL
 - 定义数据库的访问权限和安全级别、及创建用户
