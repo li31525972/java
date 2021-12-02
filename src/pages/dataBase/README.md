@@ -663,6 +663,120 @@ DROP VIEW [IF EXISTS] 视图名称;
 SELECT 列名 FROM 视图名称;
 ```
 
+## 数据备份和恢复
+### 命令行方式
+```
+// 备份
+1. 登录到mysql服务器
+2. 输入：mysqldump -u root -p 数据库名称 > 文件保存路径
+
+// 恢复
+1. 登录到mysql服务器
+2. 删除已备份的数据库
+3. 重新创建名称相同的数据库
+4. 使用该数据库
+5. 导入文件执行：source 备份文件全路径
+```
+
+## 存储过程
+### 创建
+```
+// 语法：
+-- 修改结束分隔符
+DELIMITER $
+
+-- 创建存储过程
+CREATE PROCEDURE 存储过程名称(参数列表) 
+BEGIN 
+    sql 语句列表;
+END$
+
+-- 修改结束分隔符
+DELIMITER ;
+```
+### 调用
+```
+// 语法：
+CALL 存储过程名称(实际参数);
+```
+
+### 查看
+```
+// 查询数据库中所有的存储过程
+SELECT * FROM mysql.proc WHERE db='数据库名称';
+```
+
+### 删除
+```
+DROP PROCEDURE [IF EXISTS] 存储过程名称;
+```
+
+### 变量
+```
+// 定义变量
+DECLARE 变量名 数据类型 [DEFAULT 默认值];
+
+// 赋值方式1
+SET 变量名 = 变量值;
+
+// 赋值方式2
+SELECT 列名 INTO 变量名 FROM 表名 [WHERE 条件];
+```
+
+### if 语句
+```
+IF 判断条件1 THEN 执行的sql语句1;
+[ELSEIF 判断的条件2 THEN 执行的sql语句2;]
+...
+[ELSE 执行的sql语句n;]
+END IF;
+```
+
+### while 循环
+```
+初始化语句;
+WHILE 条件判断语句 DO
+    循环体语句;
+    条件控制语句;
+END WHILE;
+```
+
+### 参数传递
+```
+-- IN 代表输入参数，需要由调用者传递实际数据(默认)
+-- OUT 代表输出参数，该参数可以作为返回值
+-- INOUT 可以作为输入参数，也可以作为输出参数
+
+
+CREATE PROCEDURE 存储过程名称([IN|OUT|INOUT] 参数名 数据类型)
+BEGIN
+    SQL 语句列表;
+END$
+```
+
+
+## 存储函数
+- 存储函数必须有返回值
+### 创建
+```
+CREATE FUNCTION 函数名称(参数列表) RETURNS 返回值类型
+BEGIN
+    SQL 语句列表;
+    RETURN 结果;
+END$
+```
+
+### 调用
+```
+SELECT 函数名称(实际参数);
+```
+
+### 删除
+```
+DROP FUNCTION 函数名称;
+```
+
+
 ## DCL
 - 定义数据库的访问权限和安全级别、及创建用户
 
