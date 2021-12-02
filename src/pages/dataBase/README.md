@@ -474,5 +474,186 @@ ALTER TABLE 表名 MODIFY 列名 数据类型 NOT NULL;
 ALTER TABLE 表名 MODIFY 列名 数据类型;
 ```
 
+## 多表操作
+
+### 一对一
+- 在任意一个表建立外键，去关联另外一个表的主键
+```
+CREATE DATABASE db3;
+
+USE db3;
+
+CREATE TABLE user(
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	name VARCHAR(20)
+);
+
+INSERT INTO user VALUES (null, '张三'),(null, '李四');
+
+CREATE TABLE card (
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	number VARCHAR(20) UNIQUE NOT NULL,
+	cid INT UNIQUE,
+	CONSTRAINT cu_fk1 FOREIGN KEY (cid) REFERENCES user(id)
+);
+
+INSERT INTO card VALUES (null,'123456'),(null, '789123');
+```
+
+### 一对多
+- 在多的一方建立外键约束，来关联-的一方主键
+```
+CREATE DATABASE db4;
+USE db4;
+
+CREATE TABLE user(
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	name VARCHAR(20) NOT NULL
+);
+
+INSERT INTO user VALUES (null, '张三'),(null, '李四');
+
+CREATE TABLE orderlist(
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	number VARCHAR(20) NOT NULL,
+	uid INT NOT NULL,
+	CONSTRAINT ou_fk1 FOREIGN KEY (uid) REFERENCES user(id)
+);
+
+INSERT INTO orderlist VALUES (null, '123', 1),(null, '234', 1),(null, '333', 2),(null, '444', 2);
+```
+
+### 多对多
+- 需要借助第三张表，中间表至少包含两个列，这两个列作为中间表的外键，分别关联两张表的主键
+```
+CREATE DATABASE db1;
+use db1;
+
+CREATE TABLE user(
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	name VARCHAR(20)
+);
+
+INSERT INTO user VALUES (null,'张三'),(null,'李四');
+
+CREATE TABLE course(
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	name VARCHAR(20)
+);
+
+INSERT INTO course VALUES (null, '数据结构'),(null, '算法'),(null, '设计模式'),(null, '网络');
+
+CREATE TABLE user_course(
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	uid INT,    -- 用于和用户建立外键关联
+	cid INT,    -- 用于和课程建立外键关联
+	CONSTRAINT uc_fk1 FOREIGN KEY (uid) REFERENCES user(id),
+	CONSTRAINT uc_fk2 FOREIGN KEY (cid) REFERENCES course(id)
+);
+
+INSERT INTO user_course VALUES (null,1,1),(null,1,2),(null,2,1),(null,2,4);
+```
+## 多表查询
+### 内连接查询
+- 内连接查询的是两张表有交集的部分数据(有主外键关联的数据)
+
+#### 显示内连接
+```
+// 基础语法：
+SELECT 列名 FORM 表名1 [INNER] JOIN 表名2 ON 条件;
+
+// 示例：查询用户信息和对应的课程信息
+SELECT * FROM user INNER JOIN user_course ON user_course.uid = user.id;
+```
+
+#### 隐式内连接
+```
+// 基础语法：
+SELECT 列名 FROM 表名1,表名2 WHERE 条件;
+```
+
+### 外连接查询
+#### 左外连接
+- 查询左表的全部数据和左右两张表有交集部分的数据
+```
+// 语法：
+SELECT 列名 FORM 表名1 LEFT [OUTER] JOIN 表名2 ON 条件;
+```
+
+#### 右外连接
+- 查询右表的全部数据和左右两张表有交集部分的数据
+```
+// 语法：
+SELECT 列名 FORM 表名1 RIGHT [OUTER] JOIN 表名2 ON 条件;
+```
+
+### 子查询
+
+#### 单行单例
+```
+// 语法：
+SELECT 列名 FROM 表名 WHERE 条件;
+// 示例：
+SELECT NAME,AGE FROM USER WHERE AGE=(SELECT MAX(AGE) FROM USER);
+```
+
+#### 多行单列
+```
+// 语法：
+SELECT 列名 FROM 表名 WHERE [NOT] IN (SELECT 列名 FROM 表名 [WHERE 条件]);
+// 示例：查询张三和李四的所有课程信息
+SELECT * FROM COURSE WHERE UID IN (SELECT ID FROM USER WHERE NAME IN ('张三','李四'));
+```
+
+#### 多行多列
+```
+// 语法：
+SELECT 列名 FORM 表名,(SELECT 列名 FROM 表名 [WHERE 条件]) [WHERE 条件];
+// 示例：
+```
+
+### 自关联查询
+- 在同一张表中数据有关联性，我们可以把这张表当成多张表来查询(比如菜单这种有父级关联的)
+```
+// 示例：
+SELECT
+    M1.ID,
+    M1.NAME,
+    M1.PID,
+    M2.ID,
+    M2.NAME 
+FROM 
+    MENULIST M1 
+LEFT OUTER JOIN 
+    MENULIST M2 
+WHERE 
+    M2.PID = M1.ID;
+```
+
+## 视图
+- 将比较复杂的查询语句所查询出来的结果自动的封装到一张虚拟的数据表里面，简化后面的操作
+
+### 创建
+```
+// 语法：
+CREATE VIEW 视图名称[(列名列表)] AS 查询语句;
+```
+
+### 查询
+```
+// 语法：
+SELECT 列名 FROM 视图名称;
+```
+
 ## DCL
 - 定义数据库的访问权限和安全级别、及创建用户
+
+
+
+
+
+
+
+
+
+

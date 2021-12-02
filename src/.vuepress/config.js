@@ -47,7 +47,7 @@ module.exports = {
                 path: '/pages/dataBase/',
                 collapsable: false,
                 children: [
-                    '',
+                    ''
                 ]
             }],
         },
@@ -55,4 +55,5 @@ module.exports = {
         lastUpdated: '更新时间',
         searchMaxSuggestions: 10,
     },
+
 }
