@@ -16,6 +16,7 @@ module.exports = {
             { text: '服务', link: '/pages/server/tomcat' },
             { text: 'Servlet', link: '/pages/servlet/' },
             { text: '数据库', link: '/pages/dataBase/' },
+            { text: 'JDBC', link: '/pages/JDBC/' },
         ],
         sidebar: {
             '/pages/basic/': [{
@@ -45,6 +46,14 @@ module.exports = {
             '/pages/dataBase/': [{
                 title: '数据库',
                 path: '/pages/dataBase/',
+                collapsable: false,
+                children: [
+                    ''
+                ]
+            }],
+            '/pages/JDBC/': [{
+                title: 'JDBC',
+                path: '/pages/JDBC/',
                 collapsable: false,
                 children: [
                     ''
