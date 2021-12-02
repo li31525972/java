@@ -188,6 +188,7 @@ ALTER TABLE 表名 DROP 字段名;
 
 ## DML
 - 表数据的增删改
+
 ### 新增表数据
 ```
 // 给指定列添加数据
@@ -329,6 +330,7 @@ SELECT SUM(列名) FROM 表名;
 SELECT AVG(列名) FROM 表名;
 ```
 
+
 ## 外键约束
 - 让表与表之间产生关联关系，保证数据的准确性
 
@@ -336,30 +338,140 @@ SELECT AVG(列名) FROM 表名;
 ```
 // ⚠️：order 不可以作为表名
 // 基本语法：
+// 基本语法：
+ALTER TABLE 表名称 ADD [CONSTRAINT 外键名称] FOREIGN KEY 列名称 REFERENCES 关联表名称(列名称);
+
 CREATE TABLE IF NOT EXISTS orderlist(
 	id INT PRIMARY KEY AUTO_INCREMENT,
 	number VARCHAR(20) NOT NULL,
 	uid INT,
 	CONSTRAINT 外键名 FOREIGN KEY (本表外键列名) REFERENCES 主表名(主表列名)
 );
-// 示例：
+// 示例：(CONSTRAINT ou_fkl 指定外键名称)
 CREATE TABLE IF NOT EXISTS orderlist(
 	id INT PRIMARY KEY AUTO_INCREMENT,
 	number VARCHAR(20) NOT NULL,
 	uid INT,
 	CONSTRAINT ou_fkl FOREIGN KEY (uid) REFERENCES user(id)
 );
-
+```
+### 单独添加外键
+```
 // 基本语法：
-ALTER TABLE 表名称 ADD FOREIGN KEY 列名称 REFERENCES 关联表名称(列名称);
-
-// 示例
-ALTER TABLE ORDER ADD FOREIGN KEY UID REFERENCES USER(ID)
+ALTER TABLE 表名 ADD [CONSTRAINT 外键名称] FOREIGN KEY (本表外键列名) REFERENCES 主表名(关联列名);
 ```
 
 ### 删除外键约束
 ```
+// 基本语法：
+ALTER TABLE 表名 DROP FOREIGN KEY 外键名;
 
+// 示例：
+ALTER TABLE orderlist DROP FOREIGN KEY ou_fkl;
+```
+
+### 级联更新和级联删除
+#### 添加外键约束，同时添加级联更新和级联删除
+```
+// 语法：
+ALTER TABLE 表名 ADD [CONSTRAINT 外键名称] FOREIGN KEY (本表关联外键ID) REFERENCES 主表名称(主表关联列名) ON UPDATE CASCADE ON DELETE CASCADE;
+
+// 示例：
+ALTER TABLE orderlist ADD CONSTRAINT ou_fkl FOREIGN KEY (uid) REFERENCES user(id) ON UPDATE CASCADE ON DELETE CASCADE;
+```
+
+## PRIMARY KEY 主键约束
+- 主键约束默认包含非空和唯一两个功能，一张表只能有一个主键，主键一般用于表中数据的唯一标识
+
+### 建表时添加主键约束
+```
+// 基本语法：
+ALTER TABLE 表名(
+    列名 数据类型 PRIMARY KEY,
+    ...,
+    列名 数据类型
+)
+```
+### 单独添加主键约束
+```
+// 基本语法：
+ALTER TABLE 表名 MODIFY 列名 数据类型 PRIMARY KEY;
+```
+
+### 删除主键约束
+```
+// 基本语法：
+ALTER TABLE 表名 DROP PRIMARY KEY;
+```
+
+## AUTO_INCREMENT 自增约束
+- `mysql`中的自增约束，必须配合键的约束一起使用
+
+### 建表添加主键自增约束
+```
+// 基本语法：
+ALTER TABLE 表名(
+    列名 数据类型 PRIMARY KEY AUTO_INCREMENT,
+    ...,
+    列名 数据类型
+)
+```
+### 删除主键自增约束
+```
+// 基本语法：
+ALTER TABLE 表名 MODIFY 列名 数据类型;
+```
+
+### 建表后单独添加主键自增约束
+```
+// 基本语法：
+ALTER TABLE 表名 MODIFY 列名 数据类型 AUTO_INCREMENT;
+```
+
+## UNIQUE 唯一约束
+### 建表时添加
+```
+// 基本语法：
+CREATE TABLE 表名(
+    列名 数据类型 UNIQUE,
+    ...,
+    列名 数据类型
+);
+```
+
+### 单独添加
+```
+// 基本语法：
+ALTER TABLE 表名 MODIFY 列名 数据类型 UNIQUE;
+```
+
+### 删除
+```
+// 基本语法：
+ALTER TABLE 表名 DROP INDEX 列名;
+```
+
+## NOT NULL 非空约束
+### 建表时添加
+```
+// 基本语法：
+CREATE TABLE 表名(
+    列名 数据类型 NOT NULL,
+    ...,
+    列名 数据类型
+);
+```
+
+### 单独添加
+```
+// 基本语法：
+ALTER TABLE 表名 MODIFY 列名 数据类型 NOT NULL;
+```
+
+### 删除
+```
+// 基本语法：
+ALTER TABLE 表名 MODIFY 列名 数据类型;
 ```
 
 ## DCL
