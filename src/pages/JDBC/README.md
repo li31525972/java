@@ -70,3 +70,124 @@ public class JDBC_Demo1 {
 }
 ```
 
+## DriverManager
+- 驱动管理对象
+
+### getConnection()
+- 获取数据库连接
+```java
+/**
+ * 获取数据库连接对象
+ * 参数：
+ *      url: 指定连接的连接的路径
+ *      user: 用户名
+ *      password: 密码
+ */
+static Connection getConnection(String url, String user, String password);
+
+// 返回值
+Connection 数据库连接对象
+```
+
+## Connection
+- 数据库连接对象
+1. 获取执行者对象
+2. 管理事务
+
+### createStatement()
+- 普通执行者对象
+```java
+// Statement createStatement();
+
+Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db1", "root", "123456");
+// 获取执行者对象
+Statement stat = con.createStatement();
+```
+
+### prepareStatement()
+- 预编译执行者对象
+```java
+Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db1", "root", "123456");
+// 获取执行者对象
+PreparedStatement preparedStatement = con.prepareStatement();
+```
+
+### setAutoCommit()
+- 开启事务
+```java
+
+```
+
+### commit()
+- 提交事务
+```java
+
+```
+
+### rollback()
+- 回滚事务
+```
+
+```
+
+### close()
+- 释放资源
+```java
+
+```
+
+## Statement
+- 执行sql语句的对象
+
+### executeUpdate()
+```java
+/**
+ * 参数：
+ *      sql 可以执行 insert update delete 语句
+ * 返回值 int: 返回可以影响的行数
+ */
+ int result = stat.executeUpdate(sql);
+```
+
+### executeQuery
+```java
+/**
+ * 参数：
+ *      sql 可以执行 select 语句
+ * 返回值 ResultSet: 封装查询的结果
+ */
+ ResultSet result = stat.executeQuery(sql);
+```
+
+### close()
+- 释放资源
+
+
+## ResultSet
+- 结果集对象
+
+### next()
+- 判断结果集中是否还有数据
+```
+boolean next();
+```
+
+### 获取结果集中的数据
+
+#### getInt()
+- 获取int类型数据
+
+#### getString()
+- 获取字符串类型数据
+
+
+
+
+
+
+
+
+
+
+
+
