@@ -30,6 +30,43 @@
 
 6. 编写Java代码，测试驱动是否能够正常加载。
 ```
+public class JDBC_Demo1 {
+    public static void main(String[] args) {
 
+        try {
+            System.out.println("开始注册驱动");
+            // 注册驱动
+            Class.forName("com.mysql.jdbc.Driver");
+            System.out.println("注册成功");
+
+            // 获取链接
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db1", "root", "123456");
+            System.out.println("创建链接成功");
+            // 获取执行者对象
+            Statement stat = con.createStatement();
+
+            // 执行sql语句，接收结果
+            String sql = "SELECT * FROM user";
+            ResultSet result = stat.executeQuery(sql);
+
+            // 处理结果
+            while (result.next()) {
+                int id = result.getInt("id");
+                String name = result.getString("name");
+                System.out.println(id + " --- " + name);
+            }
+
+            // 释放资源
+            result.close();
+            con.close();
+            stat.close();
+
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}
 ```
 
