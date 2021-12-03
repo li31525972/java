@@ -29,7 +29,7 @@
 <img src="/images/jdbc7.png"/>
 
 6. 编写Java代码，测试驱动是否能够正常加载。
-```
+```java
 public class JDBC_Demo1 {
     public static void main(String[] args) {
 
