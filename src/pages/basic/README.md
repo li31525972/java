@@ -68,7 +68,7 @@ public int addCount(int a) {
     return a + 10
 }
 ```
-### 接口
+### interface 接口
 ### 数组
 - 数组的长度是固定的
 ```java
@@ -90,18 +90,22 @@ public class Person {
 // 使用
 Person student = new Person();
 ```
-### 修饰符
-#### public
+## 修饰符
+### public
 - `public` 任何人都可以访问
 
-#### protect
+### protect
 - `protect` 继承的类可以访问以及和`private`一样的权限
 
-#### private
+### private
 - `private` 修饰的成员只能在本类中使用，不能被别的类使用
 
-#### default
+### default
 - `default` 在整个包内都可以访问
+
+### abstract
+- `abstract` 定义抽象(用于约束实现类)，只能修饰类和方法，不能修饰变量。
+
 
 ## 常用类
 
