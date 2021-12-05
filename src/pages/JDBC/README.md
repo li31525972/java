@@ -185,8 +185,163 @@ boolean next();
 - 释放资源
 
 
+## 配置文件
+1. `src`目录下创建一个`config.properties`文件
+```
+# 注册驱动
+driverClass=com.mysql.jdbc.Driver
+# 数据库链接地址
+url=jdbc:mysql://localhost:3306/db2
+# 用户名
+username=root
+# 密码
+password=123456
+```
 
+2. 添加一个`utils`包，包下创建一个`JDBCUtils`类，编写`jdbc`工具类
+```java
+package com.gm.utils;
 
+import java.io.InputStream;
+import java.sql.*;
+import java.util.Properties;
+
+public class JDBCUtils {
+    // 1. 私有构造方法
+    private JDBCUtils() {}
+    // 2. 声明所需要的配置变量
+    private static String driverClass;
+    private static String url;
+    private static String username;
+    private static String password;
+    private static Connection con;
+
+    // 3. 提供静态代码块。读取配置文件的信息为变量赋值，注册驱动
+    static {
+        try {
+            // 读取配置文件的信息为变量赋值
+            InputStream is = JDBCUtils.class.getClassLoader().getResourceAsStream("config.prpperties");
+            Properties prop = new Properties();
+            prop.load(is);
+
+            driverClass = prop.getProperty("driverClass");
+            url = prop.getProperty("url");
+            username = prop.getProperty("username");
+            password = prop.getProperty("password");
+
+            // 注册驱动
+            Class.forName(driverClass);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // 4. 提供获取数据库连接的方法
+    public static Connection getConnection() {
+        try {
+            con = DriverManager.getConnection(url, username, password);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return con;
+    }
+
+    // 5. 提供释放资源的方法
+    public static void close(Connection con, Statement stat) {
+        if (con != null) {
+            try {
+                con.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }
+
+        if (stat != null) {
+            try {
+                stat.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }
+
+    }
+    public static void close(Connection con, Statement stat, ResultSet rs) {
+        if (con != null) {
+            try {
+                con.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }
+
+        if (stat != null) {
+            try {
+                stat.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }
+
+        if (rs != null) {
+            try {
+                rs.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }
+    }
+}
+
+```
+
+3. 使用测试
+```java
+package com.gm.dao;
+
+import com.gm.domain.Student;
+import com.gm.utils.JDBCUtils;
+
+import java.sql.*;
+import java.util.ArrayList;
+
+public class StudentDaoImp1 implements StudentDao {
+
+    @Override
+    public ArrayList<Student> findAll() {
+        ArrayList<Student> list = new ArrayList<>();
+        Connection con = null;
+        Statement stat = null;
+        ResultSet result = null;
+        try {
+            con = JDBCUtils.getConnection();
+            stat = con.createStatement();
+
+            String sql = "SELECT * FROM user";
+            result = stat.executeQuery(sql);
+
+            while (result.next()) {
+                Integer sid = result.getInt("sid");
+                String name = result.getString("name");
+                Integer age = result.getInt("age");
+                Date birthday = result.getDate("birthday");
+
+                Student stu = new Student(sid, name, age, birthday);
+
+                list.add(stu);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            JDBCUtils.close(con, stat, result);
+        }
+
+        return list;
+    }
+}
+
+```
 
 
 
